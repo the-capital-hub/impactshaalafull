@@ -27,6 +27,10 @@
       justify-content: space-between;
       padding: 0px 45px;
       width: 100%;
+
+      @media (max-width: 820px) {
+        padding: 0px 20px;
+      }
       .pfp-text {
         display: flex;
         flex-direction: column;
@@ -58,9 +62,16 @@
               font-size: 12px;
               color: white;
 
-              @media (min-width: 821px) {
-                display: none ;
+              // CSS for edit profile button - Srihari
+              margin-right: auto;
+              margin-left: 20px;
+              @media (max-width: 600px) {
+                flex: 0 0 100px;
               }
+
+              // @media (min-width: 821px) {
+              //   display: none ;
+              // }
             }
           }
           h3 {
@@ -75,6 +86,7 @@
           .company-info-tiles {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
             // margin: 10px 0;
           }
         }
@@ -84,9 +96,9 @@
             padding: 0;
             margin: 0;
           }
-          .description {
-            width: 80%;
-          }
+          // .description {
+          //   width: 80%;
+          // }
           p:first-child {
             margin-bottom: 10px;
             font-size: 14px;

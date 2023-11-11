@@ -1,14 +1,15 @@
 import "./ProtectedNavBar.scss";
 import React, { useEffect, useState } from "react";
-import { Button, Drawer } from "antd";
+import { Badge, Button, Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import { logo } from "../../assets";
 import ProfileLeft from "../ProfileLeft/ProfileLeft";
-import { bell, chat } from "../../assets/home";
 import Notifications from "../Notifications/Notifications";
-import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/service";
 import HomeRight from "../HomeRight/HomeRight";
+import { BsBell, BsBellFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { PiChats } from "react-icons/pi";
+import { logo } from "../../assets/index";
 
 const ProtectedNavBar = ({ user, pageTitle }) => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -16,7 +17,8 @@ const ProtectedNavBar = ({ user, pageTitle }) => {
   const onClose = () => setIsDrawerOpen(false);
 
   const [shownotifications, setShownotifications] = useState(false);
-  const [notifCount, setNotifCount] = useState(100);
+  const [notifCount, setNotifCount] = useState(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,8 +29,7 @@ const ProtectedNavBar = ({ user, pageTitle }) => {
             user?._id
           }`
         );
-        if (response.data.count >= 100) setNotifCount("99+");
-        else setNotifCount(response.data.count);
+        setNotifCount(response.data.count);
       } catch (err) {
         console.error(err);
       }
@@ -50,14 +51,21 @@ const ProtectedNavBar = ({ user, pageTitle }) => {
 
       <div className="icons">
         <div className="notification-container">
-          <img
-            onClick={() => setShownotifications(!shownotifications)}
-            src={bell}
-            alt="notifications"
-            style={{ cursor: "pointer" }}
-          />
-          {notifCount ? <div className="notifcount">{notifCount}</div> : ""}
-          {shownotifications && <Notifications />}
+          <Badge count={notifCount} overflowCount={10}>
+            {shownotifications ? (
+              <BsBellFill
+                onClick={() => setShownotifications(!shownotifications)}
+                style={{ cursor: "pointer" }}
+              />
+            ) : (
+              <BsBell
+                onClick={() => setShownotifications(!shownotifications)}
+                style={{ cursor: "pointer" }}
+              />
+            )}
+            {shownotifications && <Notifications />}
+          </Badge>
+          <PiChats onClick={() => navigate("/chats")} />
         </div>
         {/* <img
             onClick={() => navigate(`/chats`)}
@@ -70,15 +78,14 @@ const ProtectedNavBar = ({ user, pageTitle }) => {
         </Button> */}
       </div>
       <Drawer
-        title="ImpactShaala"
+        title={<img src={logo} alt="ImpactShaala" style={{ width: "70%" }} />}
         placement="left"
         closable={false}
         onClose={onClose}
         open={isDrawerOpen}
         className="protected-navbar-drawer"
       >
-        {/* <ProfileLeft onClick={onClose} /> */}
-        <ProfileLeft />
+        <ProfileLeft onLinkClick={() => onClose()} />
         <HomeRight />
       </Drawer>
     </nav>

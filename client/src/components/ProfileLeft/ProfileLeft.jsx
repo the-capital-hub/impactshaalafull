@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import "./profileLeft.scss";
 
 import ProfileLinks from "../ProfileLinks/ProfileLinks";
@@ -7,32 +9,37 @@ import {
   chat,
   feedback,
   home,
-  logout,
   profileIcon,
   savedposts,
   settings,
 } from "../../assets/profile";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import Cookies from "js-cookie";
+import { useSelector } from "react-redux";
 
-// functional component
-const ProfileLeft = ({ page, ...props }) => {
-  const navigate = useNavigate();
+const ProfileLeft = ({ ...props }) => {
+  const authUser = useSelector((state) => state.authUser.user);
   const [showCreatePost, setShowCreatePost] = useState(false);
-
-  // functions
-  // const handleLogout = async () => {
-  //   localStorage.removeItem("IsUser");
-  //   Cookies.remove("accessToken");
-  //   navigate("/");
-  // };
 
   const handleCancel = (prop) => {
     setShowCreatePost(prop);
   };
 
-  // return
+  const links = [
+    { path: "/home", img: home, text: "Home" },
+    {
+      path: `/profile/${authUser._id}`,
+      img: profileIcon,
+      text: "Profile",
+    },
+    { path: "/chats", img: chat, text: "Chats" },
+    { path: "/savedPosts", img: savedposts, text: "Saved Posts" },
+    {
+      path: `/collaborations`,
+      img: feedback,
+      text: "Collaborations",
+    },
+    { path: "/settings", img: settings, text: "Settings" },
+  ];
+
   return (
     <div className="profileLeft">
       {showCreatePost && <CreatePost onCancel={handleCancel} />}
@@ -42,49 +49,15 @@ const ProfileLeft = ({ page, ...props }) => {
       >
         Create Post +
       </button>
-      <ProfileLinks
-        {...props}
-        highlighted={page === "home" ? true : false}
-        img={home}
-        linkText={"Home"}
-        to="/home"
-      />
-      <ProfileLinks
-        {...props}
-        highlighted={page === "profile" ? true : false}
-        img={profileIcon}
-        linkText={"Profile"}
-      />
-      <ProfileLinks
-        {...props}
-        highlighted={page === "chat" ? true : false}
-        img={chat}
-        linkText={"Chats"}
-        to="/chats"
-      />
-      <ProfileLinks
-        {...props}
-        highlighted={page === "savedPosts" ? true : false}
-        img={savedposts}
-        linkText={"Saved Posts"}
-        to="/savedPosts"
-      />
-      <ProfileLinks
-        {...props}
-        highlighted={page === "collaborations" ? true : false}
-        img={feedback}
-        linkText={"Collaborations"}
-      />
-      <ProfileLinks
-        {...props}
-        highlighted={page === "settings" ? true : false}
-        img={settings}
-        linkText={"Settings"}
-      />
-      {/* <button onClick={handleLogout} className="logout">
-        <img src={logout} alt="logout" />
-        <span>Logout</span>
-      </button> */}
+      {links.map((link, index) => (
+        <ProfileLinks
+          onClick={props?.onLinkClick}
+          key={index}
+          img={link.img}
+          linkText={link.text}
+          to={link.path}
+        />
+      ))}
     </div>
   );
 };

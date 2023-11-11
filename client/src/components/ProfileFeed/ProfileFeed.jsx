@@ -128,7 +128,7 @@ const ProfileFeed = ({ user }) => {
               className={showProjectAccomplishments ? "selected" : ""}
               onClick={handleShowProjectAccomplishments}
             >
-              Project Accomplishments
+              Accomplishments
             </h4>
           </div>
           {showPosts && <Posts posts={posts} />}
@@ -178,6 +178,7 @@ const ProfileFeed = ({ user }) => {
                         background: "lightgrey",
                         padding: "10px",
                       }}
+                      key={accomplishment._id}
                     >
                       Project Name : {accomplishment?.projectName} {"  "}
                       Project Location : {accomplishment?.projectLocation}

@@ -1,0 +1,78 @@
+.text-danger {
+  color: red;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.btn {
+  border: none;
+  padding: 10px 15px;
+  color: white;
+  border-radius: 15px;
+  margin: 10px;
+  &:hover {
+    color: black;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+  &:active {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px inset;
+  }
+  &:disabled {
+    opacity: 0.8;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px inset;
+  }
+
+  &-light {
+    background-color: white;
+    color: rgb(128, 128, 128);
+  }
+}
+
+.highlighted {
+  border: 1px solid black;
+}
+
+.bg-lightblue {
+  background: #d5e8ed;
+}
+
+.w-max-content {
+  width: max-content;
+}
+
+// Button variants
+.btn-primary {
+  outline: none;
+  border: 1px solid #717eee;
+  background-color: #717eee;
+
+  color: #fff;
+  font-size: 1rem;
+  text-align: center;
+
+  padding: 0.5em 1.5em;
+  border-radius: 10rem;
+
+  @media (min-width: 768px) {
+    padding: 0.75em 2.5em;
+  }
+}
+
+.btn-outline-primary {
+  outline: none;
+  border: 1px solid #717eee;
+  background-color: #fff;
+
+  color: #000;
+  font-size: 1rem;
+  text-align: center;
+
+  padding: 0.5em 1.5em;
+  border-radius: 10rem;
+
+  @media (min-width: 768px) {
+    padding: 0.75em 2.5em;
+  }
+}
