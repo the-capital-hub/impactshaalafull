@@ -47,6 +47,9 @@ app.use(express.json({ limit: "10mb" }));
 app.use(cookieParser());
 
 //routes
+app.use("/welcome", (_, res, next) => {
+  res.send("This is the impactshaala backend");
+});
 app.use("/api/company", companyRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/chat", chatRoutes);
