@@ -37,6 +37,10 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+app.use((_, res, next) => {
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 //middleware
 app.use(express.json({ limit: "10mb" }));
