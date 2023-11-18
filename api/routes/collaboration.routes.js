@@ -9,6 +9,7 @@ import {
   getCollabs,
   isCollabSent,
   getAllOngoingCompletedCollabs,
+  deleteCollab,
 } from "../controllers/collaborations.controller.js";
 import { authenticateUser } from "../middlewares/authenticateUsers.js";
 
@@ -30,5 +31,6 @@ router.get("/singlefromId/:id", getCollabWithFromId);
 
 router.get("/isCollabSent/:fromId/:toId/:postId", isCollabSent);
 router.get("/getAllOngoingCompletedCollabs", getAllOngoingCompletedCollabs);
+router.delete("/deleteCollab/:id", deleteCollab);
 
 export default router;

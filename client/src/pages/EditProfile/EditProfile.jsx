@@ -7,11 +7,13 @@ import { updateUserAPI } from "../../api/company";
 import { useDispatch } from "react-redux";
 import { setUserAuth } from "../../store/slices/user";
 import { toast } from "react-toastify";
+import { getBase64 } from "../../utils/getBase64";
+import axiosInstance from "../../utils/service";
 
 const EditProfile = () => {
   const { user, setPageTitle } = useOutletContext();
   const [updateUser, setUpdateUser] = useState({
-    companyName: user?.companyName || "",
+    name: user?.name || "",
     tagline: user?.tagline || "",
     description: user?.description || "",
     email: user?.email || "",
@@ -19,11 +21,16 @@ const EditProfile = () => {
     addressOne: user?.addressOne || "",
     addressTwo: user?.addressTwo || "",
     city: user?.city || "",
+    pfp: user?.pfp || "",
+    coverPic: user?.coverPic || "",
+
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [updating, setUpdating] = useState(false);
+  const [pfp, setPfp] = useState(null);
+  const [cover, setCover] = useState(null);
 
   // Update page title
   useEffect(() => {
@@ -38,10 +45,36 @@ const EditProfile = () => {
     }));
   };
 
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files[0];
+    if (e.target.name === 'pfp') {
+      setPfp(selectedFile);
+    } else {
+      setCover(selectedFile);
+    }
+  };
+
   const handleSubmit = async (e) => {
     try {
       setUpdating(true);
       e.preventDefault();
+
+      if (pfp) {
+        const base64 = await getBase64(pfp);
+        const response = await axiosInstance.post(`${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`, {
+          image: base64,
+        })
+        console.log(response.data.url);
+        updateUser.pfp = response.data.url
+      }
+      if (cover) {
+        const base64 = await getBase64(cover);
+        const response = await axiosInstance.post(`${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`, {
+          image: base64,
+        })
+        console.log(response.data.url);
+        updateUser.coverPic = response.data.url
+      }
       const updatedUser = await updateUserAPI(user._id, updateUser);
       dispatch(setUserAuth({ user: updatedUser }));
       toast.success("Profile Updated");
@@ -58,10 +91,22 @@ const EditProfile = () => {
       <ProfileHeader user={user} pageName={"editProfile"} />
       <form onSubmit={handleSubmit} className="edits">
         <TitleInput
+          type="file"
+          onChange={handleFileChange}
+          title={"Profile Picture"}
+          name="pfp"
+        />
+        <TitleInput
+          type="file"
+          onChange={handleFileChange}
+          title={"Cover Picture"}
+          name="coverPic"
+        />
+        <TitleInput
           onChange={handleUserUpdate}
           title={"Company Name"}
-          value={updateUser?.companyName}
-          name="companyName"
+          value={updateUser?.name}
+          name="name"
         />
         <TitleInput
           onChange={handleUserUpdate}
