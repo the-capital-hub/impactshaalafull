@@ -7,7 +7,7 @@ import PostModal from "../PostModal/PostModal";
 import { useNavigate } from "react-router-dom";
 import GetCreditScore from "../GetCreditScore/GetCreditScore";
 
-const CollaborationsCard = ({ collabId, user, post, page, setIsAccepted, isAccepted }) => {
+const CollaborationsCard = ({ collabId, user, post, page, getUser }) => {
   const navigate = useNavigate();
 
   const [Post, setPost] = useState(null);
@@ -41,7 +41,7 @@ const CollaborationsCard = ({ collabId, user, post, page, setIsAccepted, isAccep
       <button onClick={showCollab}>View Collaboration Details</button>
       {page === "collabsAccepted" && (
         <div className="collabButtons">
-          <button onClick={() => navigate(`/chats`)}>Message</button>
+          <button onClick={() => navigate(`/chats?id=${user._id}`)}>Message</button>
           <button onClick={() => setShowGetCreditScore(true)}>
             Get Credit Score
           </button>
@@ -56,8 +56,7 @@ const CollaborationsCard = ({ collabId, user, post, page, setIsAccepted, isAccep
             onCancel={setShowPost}
             page={page}
             collabId={collabId}
-            setIsAccepted={setIsAccepted}
-            isAccepted={isAccepted}
+            getUser={getUser}
           />
         </div>
       )}

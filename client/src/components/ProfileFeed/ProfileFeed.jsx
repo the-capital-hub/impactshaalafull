@@ -14,7 +14,7 @@ import {
   newProjectAccomplishmentAPI,
 } from "../../api/projectAccomplishment";
 
-const ProfileFeed = ({ user }) => {
+const ProfileFeed = ({ user, userStats }) => {
   const params = useParams();
   const { user: authUser } = useOutletContext();
 
@@ -101,7 +101,7 @@ const ProfileFeed = ({ user }) => {
 
   return (
     <div className="profile">
-      <ProfileHeader user={user} pageName={"profile"} />
+      <ProfileHeader user={user} pageName={"profile"} userStats={userStats}/>
       
       <div className="feed">
         <div className="achievements">

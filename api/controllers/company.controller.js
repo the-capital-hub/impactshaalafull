@@ -273,18 +273,28 @@ export const getUserStat = async (req, res) => {
   try {
     const user = await Company.findById(req.params.id);
     const collabs = await Collaboration.countDocuments({
-      fromId: req.params.id,
+      $or: [{ fromId: req.params.id }, { toId: req.params.id }]
     });
     const posts = await Post.countDocuments({ createdById: req.params.id });
     const ongoingProjects = await Collaboration.countDocuments({
       $or: [{ fromId: req.params.id }, { toId: req.params.id }],
       completed: "ongoing",
     });
+    const completedCollabs = await Collaboration.countDocuments({
+      $or: [{ fromId: req.params.id }, { toId: req.params.id }],
+      completed: "completed",
+    });
+    const collabsNotPending = await Collaboration.countDocuments({
+      $or: [{ fromId: req.params.id }, { toId: req.params.id }],
+      completed: { $ne: "pending" },
+    });
     res.status(200).send({
       userScore: user.score,
       collabs,
       posts,
       ongoingProjects,
+      completedCollabs,
+      collabsNotPending,
     });
   } catch (err) {
     res.status(500).send(err);

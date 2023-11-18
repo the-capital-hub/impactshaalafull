@@ -23,12 +23,10 @@ const CollaborationsAccepted = () => {
         const user = await axiosInstance.get(
           `${import.meta.env.VITE_BASE_URL}/api/company/getuser/${authUser._id}`
         );
-        setCollabsAcceptedIds(new Set(user?.data.collaborationIdsAccepted));
-        // console.log("asdsads",user.data.collaborationIdsAccepted);
-        // console.log(collabsAcceptedIds);
         //todo loop over collabids and then get the collab for each id
         const collabAcceptedIds = new Set(user?.data.collaborationIdsAccepted);
         const collabIdsArray = Array.from(collabAcceptedIds);
+        setCollabsAcceptedIds(collabIdsArray);
         collabIdsArray?.map(async (collab) => {
           const collabs = await axiosInstance.get(
             `${import.meta.env.VITE_BASE_URL
@@ -60,7 +58,7 @@ const CollaborationsAccepted = () => {
           key={index}
           user={user}
           post={Posts[index]}
-          collabId={collabsAcceptedIds[index]?._id}
+          collabId={collabsAcceptedIds[index]}
           page={"collabsAccepted"}
         />
       ))}
