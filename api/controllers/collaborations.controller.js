@@ -147,3 +147,16 @@ export const getAllOngoingCompletedCollabs = async (req, res) => {
     res.status(500).send(err);
   }
 };
+
+export const deleteCollab = async (req, res) => {
+  try {
+    const deletedCollab = await Collaboration.findByIdAndDelete(req.params.id);
+    if (!deletedCollab) {
+      return res.status(404).send({ message: 'Collaboration not found' });
+    }
+    res.status(200).send({ message: 'Collaboration deleted successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send(err);
+  }
+};

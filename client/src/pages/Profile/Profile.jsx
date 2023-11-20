@@ -13,6 +13,7 @@ const Profile = () => {
 
   // states
   const [user, setUser] = useState({});
+  const [userStats, setUserStats] = useState({});
   const [feedbackFrom, setFeedbackFrom] = useState(false);
   const navigate = useNavigate();
   const params = useParams();
@@ -23,6 +24,9 @@ const Profile = () => {
   useEffect(() => {
     setPageTitle("Profile");
   }, []);
+
+
+
 
   useEffect(() => {
     const getUser = async () => {
@@ -35,6 +39,11 @@ const Profile = () => {
           `${import.meta.env.VITE_BASE_URL}/api/company/getuser/${id}`
         );
         setUser(res.data);
+        const response = await axiosInstance.get(
+          `${import.meta.env.VITE_BASE_URL}/api/company/stats/${id}`
+        );
+        console.log(response.data);
+        setUserStats(response.data);
       } catch (err) {
         console.log(err);
       } finally {
@@ -76,7 +85,7 @@ const Profile = () => {
                 Edit Profile
               </button>
             )} */}
-          <ProfileFeed user={user} />
+          <ProfileFeed user={user} userStats={userStats} />
         </div>
       </div>
     </div>

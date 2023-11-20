@@ -7,7 +7,7 @@ import "./profileHeader.scss";
 import moment from "moment";
 import { useSelector } from "react-redux";
 
-const ProfileHeader = ({ user, pageName }) => {
+const ProfileHeader = ({ user, pageName, userStats }) => {
   const navigate = useNavigate();
   const authUser = useSelector((state) => state.authUser.user);
 
@@ -22,7 +22,7 @@ const ProfileHeader = ({ user, pageName }) => {
             <img className="pfp" src={user?.pfp || nopfp} alt="" />
             <div className="company-info">
               <div className="header">
-                <h3>{user?.companyName}</h3>
+                <h3>{user?.name}</h3>
                 {authUser?._id === user._id && pageName !== "editProfile" && (
                   <button
                     className="feedbackbutton"
@@ -33,7 +33,7 @@ const ProfileHeader = ({ user, pageName }) => {
                 )}
                 {pageName !== "editProfile" && (
                   <div className="stats">
-                    <Hex />
+                    <Hex userStats={userStats} />
                   </div>
                 )}
               </div>
@@ -57,10 +57,11 @@ const ProfileHeader = ({ user, pageName }) => {
             <div className="company-about">
               <p>Joined On {moment(user?.createdAt).format("ll")}</p>
               <p className="description">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                {/* Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Sapiente laborum commodi reiciendis labore quibusdam vero
                 exercitationem ab fugiat dolor voluptates natus facilis sit unde
-                a tempore enim dicta, magni deserunt.
+                a tempore enim dicta, magni deserunt. */}
+                {user?.description}
               </p>
             </div>
             <Tags tags={user?.tags} />

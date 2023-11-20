@@ -6,6 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
+import { s3 } from "../../utils/awsConfig";
 
 const CreatePost = ({ onCancel }) => {
   const date = new Date();
@@ -25,6 +26,8 @@ const CreatePost = ({ onCancel }) => {
     time: date.toTimeString().slice(0, 5),
     tenure: "Micro Projects: (1 to 3 days)",
     keywords: loggedInUser.tags,
+    attachment: "",
+    attachmentUrl: "",
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
 
@@ -36,11 +39,19 @@ const CreatePost = ({ onCancel }) => {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
-    console.log(post);
-    // let updatedPost = post;
-    // if (updatedPost?.keywords) {
-    //   updatedPost.keywords = updatedPost?.keywords.split(" ");
-    // }
+    if (selectedFiles) {
+      // const timestamp = Date.now();
+      // const fileName = `${timestamp}_${selectedFiles.name}`;
+      // const params = {
+      //   Bucket: "impactshaala-documents",
+      //   Key: `docs/${fileName}`,
+      //   Body: selectedFiles,
+      // }
+      // const res = await s3.upload(params).promise();
+      // post.attachmentUrl = res.Location;
+      // post.attachment = selectedFiles.name;
+    }
+
     try {
       const res = await axiosInstance.post(
         `${import.meta.env.VITE_BASE_URL}/api/post/create`,
@@ -62,7 +73,7 @@ const CreatePost = ({ onCancel }) => {
   };
 
   const handleFileInputChange = (e) => {
-    const files = Array.from(e.target.files); // Convert FileList to an array
+    const files = e.target.files[0]; // Convert FileList to an array
     setSelectedFiles(files);
   };
 
@@ -279,7 +290,7 @@ const CreatePost = ({ onCancel }) => {
           </div>
 
           <div className="input">
-            <h4>Attachments</h4>
+            <h4>Attachment</h4>
             <div className="input">
               <input
                 type="file"
@@ -287,7 +298,7 @@ const CreatePost = ({ onCancel }) => {
                 onChange={handleFileInputChange}
                 name="attachments"
                 id="attachments"
-                multiple
+                // multiple
                 required
               />
               {/* <label htmlFor="attachments">

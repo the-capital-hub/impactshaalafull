@@ -1,17 +1,29 @@
 import "./titleInput.scss";
 
-const TitleInput = ({ title, value, onChange, name }) => {
+const TitleInput = ({ title, value, onChange, name, type }) => {
   return (
     <div className="titleInput">
       <h5>{title}</h5>
-      <input
-        type="text"
-        name={name}
-        id=""
-        value={value}
-        onChange={onChange}
-        required
-      />
+      {type === 'file' ?
+        <input
+          type="file"
+          name={name}
+          id=""
+          value={value}
+          onChange={onChange}
+          // required
+        />
+        :
+        <input
+          type="text"
+          name={name}
+          id=""
+          value={value}
+          onChange={onChange}
+          required
+        />
+      }
+
     </div>
   );
 };

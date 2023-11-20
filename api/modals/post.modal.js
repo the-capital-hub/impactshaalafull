@@ -42,7 +42,10 @@ const postSchema = new Schema(
     tenure: {
       type: String,
     },
-    attachments: {
+    attachment: {
+      type: String,
+    },
+    attachmentUrl: {
       type: String,
     },
     fromDate: {
