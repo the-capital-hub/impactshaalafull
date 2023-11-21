@@ -33,7 +33,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
       try {
         // getting post of the user
         const res = await axiosInstance.get(
-          `${import.meta.env.VITE_BASE_URL}/api/company/getuser/${post?.createdById
+          `${import.meta.env.VITE_BASE_URL}/api/company/getuser/${
+            post?.createdById
           }`
         );
         setUser(res.data);
@@ -50,9 +51,6 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
       getUser();
     }
   }, []);
-
-
-
 
   // function
 
@@ -87,7 +85,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
     if (bookmarked === false) {
       try {
         const res = await axiosInstance.post(
-          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${authUser._id
+          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${
+            authUser._id
           }`,
           {
             $push: { bookmarkedPosts: post._id },
@@ -101,7 +100,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
     } else if (bookmarked === true) {
       try {
         const res = await axiosInstance.post(
-          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${authUser._id
+          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${
+            authUser._id
           }`,
           {
             $pull: { bookmarkedPosts: post?._id },
@@ -119,7 +119,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
   const handleChatClick = async () => {
     try {
       const findChat = await axiosInstance.get(
-        `${import.meta.env.VITE_BASE_URL}/api/chat/find/${authUser._id}/${post?.createdById
+        `${import.meta.env.VITE_BASE_URL}/api/chat/find/${authUser._id}/${
+          post?.createdById
         }`
       );
       if (!findChat?.data) {
@@ -259,7 +260,9 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
         postId: post?._id,
       };
       const { data: isSentResponse } = await axiosInstance.get(
-        `${import.meta.env.VITE_BASE_URL}/api/collaboration/isCollabSent/${authUser._id}/${post?.createdById}/${post._id}`
+        `${import.meta.env.VITE_BASE_URL}/api/collaboration/isCollabSent/${
+          authUser._id
+        }/${post?.createdById}/${post._id}`
       );
       if (isSentResponse.isSent) {
         handleCollabRequest("You have already sent the collab request");
@@ -272,7 +275,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
         );
         //update logged in user
         const resUpdateLoggedInUser = await axiosInstance.post(
-          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${authUser._id
+          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${
+            authUser._id
           }`,
           {
             $push: { collaborationIds: resCollab?.data._id },
@@ -281,7 +285,8 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
 
         //updated user who posted it
         const resUpdatePostedInUser = await axiosInstance.post(
-          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${post?.createdById
+          `${import.meta.env.VITE_BASE_URL}/api/company/updateuser/${
+            post?.createdById
           }`,
           {
             $push: { collaborationIds: resCollab?.data._id },
@@ -301,7 +306,7 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
     } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   const [showDetails, setShowDetails] = useState(false);
 
@@ -311,6 +316,11 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
 
   const handleClose = () => {
     setShowDetails(false);
+  };
+
+  const downloadPDF = () => {
+    alert("Hello");
+    window.open(post.attachmentUrl, "_blank");
   };
 
   return (
@@ -362,20 +372,22 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
         <div className="containerFooter">
           <p>{format(post?.createdAt)}</p>
           <div className="links">
-            {!ongoingCompletedCollabsIds?.includes(post._id.toString()) && post?.createdById && authUser._id !== post.createdById && (
-              <Popover
-                content={collabStatus}
-                trigger="click"
-                open={collabStatus}
-              >
-                <img
-                  className="collabImage"
-                  src={collaboration}
-                  alt=""
-                  onClick={handleCollabClick}
-                />
-              </Popover>
-            )}
+            {!ongoingCompletedCollabsIds?.includes(post._id.toString()) &&
+              post?.createdById &&
+              authUser._id !== post.createdById && (
+                <Popover
+                  content={collabStatus}
+                  trigger="click"
+                  open={collabStatus}
+                >
+                  <img
+                    className="collabImage"
+                    src={collaboration}
+                    alt=""
+                    onClick={handleCollabClick}
+                  />
+                </Popover>
+              )}
             {/* {post?.createdById ? (
               <img
                 src={backblue}
@@ -444,6 +456,12 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
                   <td>
                     {post?.fromDate &&
                       new Date(post?.toDate).toISOString().split("T")[0]}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Attachment:</th>
+                  <td>
+                    <a href={post.attachmentUrl}>{post.attachment}</a>
                   </td>
                 </tr>
               </tbody>
