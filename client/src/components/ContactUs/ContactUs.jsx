@@ -4,6 +4,7 @@ import emailjs from "@emailjs/browser";
 import axiosInstance from "../../utils/service";
 import { useParams } from "react-router-dom";
 import Modal from "../Modal/Modal";
+import { s3 } from "../../utils/awsConfig";
 
 const ContactUs = ({ onCancel, email }) => {
   const loggedInUser = JSON.parse(localStorage.getItem("IsUser"));
@@ -41,7 +42,7 @@ const ContactUs = ({ onCancel, email }) => {
     }
   };
 
-  const handleEmail = (e) => {
+  const handleEmail = async (e) => {
     e.preventDefault();
     // oncancel(false);
     const {
@@ -54,9 +55,24 @@ const ContactUs = ({ onCancel, email }) => {
       startDate,
       endDate,
       tenure,
+      attachment,
     } = form;
 
     const collaboratorString = collaborateWith.join(', ');
+    let attachmentName = "";
+    let attachmentUrl = "";
+    if (attachment) {
+      const timestamp = Date.now();
+      const fileName = `${timestamp}_${attachment.name}`;
+      const params = {
+        Bucket: "impactshaaladocuments",
+        Key: `documents/${fileName}`,
+        Body: attachment,
+      }
+      const res = await s3.upload(params).promise();
+      attachmentUrl = res.Location;
+      attachmentName = attachment.name;
+    }
 
     const emailMessage = `
     <!DOCTYPE html>
@@ -123,6 +139,7 @@ const ContactUs = ({ onCancel, email }) => {
           <li><strong>Start Date:</strong> ${startDate}</li>
           <li><strong>End Date:</strong> ${endDate}</li>
           <li><strong>Tenure:</strong> ${tenure}</li>
+          <li><strong>Attachment:</strong> <a href="${attachmentUrl}">${attachmentName}</a></li>
         </ul>
         <p><strong>Additional Details:</strong> ${additionalDetails}</p>
       </div>
