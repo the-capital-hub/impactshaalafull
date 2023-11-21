@@ -313,6 +313,11 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
     setShowDetails(false);
   };
 
+  const downloadPDF = () => {
+    alert("Hello");
+    window.open(post.attachmentUrl, '_blank');
+  }
+
   return (
     <div className={user?.name ? "post" : "post bgblue"}>
       <div className="user">
@@ -444,6 +449,12 @@ const Post = ({ post, ongoingCompletedCollabsIds }) => {
                   <td>
                     {post?.fromDate &&
                       new Date(post?.toDate).toISOString().split("T")[0]}
+                  </td>
+                </tr>
+                <tr>
+                  <th>Attachment:</th>
+                  <td >
+                    <a href={post.attachmentUrl}>{post.attachment}</a>
                   </td>
                 </tr>
               </tbody>

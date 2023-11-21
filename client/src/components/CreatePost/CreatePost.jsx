@@ -40,16 +40,16 @@ const CreatePost = ({ onCancel }) => {
   const handleCreatePost = async (e) => {
     e.preventDefault();
     if (selectedFiles) {
-      // const timestamp = Date.now();
-      // const fileName = `${timestamp}_${selectedFiles.name}`;
-      // const params = {
-      //   Bucket: "impactshaala-documents",
-      //   Key: `docs/${fileName}`,
-      //   Body: selectedFiles,
-      // }
-      // const res = await s3.upload(params).promise();
-      // post.attachmentUrl = res.Location;
-      // post.attachment = selectedFiles.name;
+      const timestamp = Date.now();
+      const fileName = `${timestamp}_${selectedFiles.name}`;
+      const params = {
+        Bucket: "impactshaaladocuments",
+        Key: `documents/${fileName}`,
+        Body: selectedFiles,
+      }
+      const res = await s3.upload(params).promise();
+      post.attachmentUrl = res.Location;
+      post.attachment = selectedFiles.name;
     }
 
     try {
