@@ -96,7 +96,6 @@ const SignUp = () => {
         })
       );
       navigate(`/home`);
-
     } catch (err) {
       console.log("Error", err);
       // adding new user
@@ -165,8 +164,9 @@ const SignUp = () => {
       navigator.geolocation.getCurrentPosition((position) => {
         const latitude = position.coords.latitude;
         const longitude = position.coords.longitude;
-        const geoUrl = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${import.meta.env.VITE_ACCUWEATHER_KEY
-          }&q=${latitude}%2C${longitude}`;
+        const geoUrl = `http://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${
+          import.meta.env.VITE_ACCUWEATHER_KEY
+        }&q=${latitude}%2C${longitude}`;
         fetch(geoUrl)
           .then((res) => res.json())
           .then((data) => {
@@ -261,18 +261,24 @@ const SignUp = () => {
         if (pfp) {
           const base64 = await getBase64(pfp);
 
-          const response = await axiosInstance.post(`${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`, {
-            image: base64,
-          })
+          const response = await axiosInstance.post(
+            `${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`,
+            {
+              image: base64,
+            }
+          );
           console.log(response.data.url);
-          pfpUrl = response.data.url
+          pfpUrl = response.data.url;
         }
         if (coverPic) {
           const base64 = await getBase64(coverPic);
-          const response = await axiosInstance.post(`${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`, {
-            image: base64,
-          })
-          coverPicUrl = response.data.url
+          const response = await axiosInstance.post(
+            `${import.meta.env.VITE_BASE_URL}/api/company/uploadImage`,
+            {
+              image: base64,
+            }
+          );
+          coverPicUrl = response.data.url;
         }
         try {
           const res = await axiosInstance.post(
@@ -380,7 +386,8 @@ const SignUp = () => {
   const handlePincode = async () => {
     console.log(newUser.pinCode);
     const { data: response } = await axiosInstance.get(
-      `${import.meta.env.VITE_BASE_URL}/api/company/getAddress/${newUser.pinCode
+      `${import.meta.env.VITE_BASE_URL}/api/company/getAddress/${
+        newUser.pinCode
       }`
     );
     // const data = response.data;
@@ -450,9 +457,6 @@ const SignUp = () => {
             <ForgotPasswordPopup showPopup={setShowForgotPasswordPopup} />
           )}
         </span>
-        <p className="signupToggle" onClick={handleSwitch}>
-          Sign up?
-        </p>
         {isLoading ? (
           <button>
             <Circles
@@ -468,6 +472,9 @@ const SignUp = () => {
         ) : (
           <button type="submit">Sign In</button>
         )}
+        <span onClick={handleSignUpChange} type="submit" className="mobile-sign-up-button">
+          Sign Up ?
+        </span>
       </form>
     </div>
   );
@@ -880,7 +887,7 @@ const SignUp = () => {
                 type="submit"
                 name=""
                 id=""
-              // hidden
+                // hidden
               >
                 {" "}
                 Add{" "}
