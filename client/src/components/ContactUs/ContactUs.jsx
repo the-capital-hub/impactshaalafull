@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser";
 import axiosInstance from "../../utils/service";
 import { useParams } from "react-router-dom";
 import Modal from "../Modal/Modal";
-import { s3 } from "../../utils/awsConfig";
+// import { s3 } from "../../utils/awsConfig";
 
 const ContactUs = ({ onCancel, email }) => {
   const loggedInUser = JSON.parse(localStorage.getItem("IsUser"));
@@ -61,18 +61,18 @@ const ContactUs = ({ onCancel, email }) => {
     const collaboratorString = collaborateWith.join(', ');
     let attachmentName = "";
     let attachmentUrl = "";
-    if (attachment) {
-      const timestamp = Date.now();
-      const fileName = `${timestamp}_${attachment.name}`;
-      const params = {
-        Bucket: "impactshaaladocuments",
-        Key: `documents/${fileName}`,
-        Body: attachment,
-      }
-      const res = await s3.upload(params).promise();
-      attachmentUrl = res.Location;
-      attachmentName = attachment.name;
-    }
+    // if (attachment) {
+    //   const timestamp = Date.now();
+    //   const fileName = `${timestamp}_${attachment.name}`;
+    //   const params = {
+    //     Bucket: "impactshaaladocuments",
+    //     Key: `documents/${fileName}`,
+    //     Body: attachment,
+    //   }
+    //   const res = await s3.upload(params).promise();
+    //   attachmentUrl = res.Location;
+    //   attachmentName = attachment.name;
+    // }
 
     const emailMessage = `
     <!DOCTYPE html>

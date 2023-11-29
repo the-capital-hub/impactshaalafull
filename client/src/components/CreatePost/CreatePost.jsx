@@ -6,7 +6,7 @@ import { useOutletContext } from "react-router-dom";
 import Modal from "../Modal/Modal";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
-import { s3 } from "../../utils/awsConfig";
+// import { s3 } from "../../utils/awsConfig";
 
 const CreatePost = ({ onCancel }) => {
   const date = new Date();
@@ -39,18 +39,18 @@ const CreatePost = ({ onCancel }) => {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
-    if (selectedFiles) {
-      const timestamp = Date.now();
-      const fileName = `${timestamp}_${selectedFiles.name}`;
-      const params = {
-        Bucket: "impactshaaladocuments",
-        Key: `documents/${fileName}`,
-        Body: selectedFiles,
-      }
-      const res = await s3.upload(params).promise();
-      post.attachmentUrl = res.Location;
-      post.attachment = selectedFiles.name;
-    }
+    // if (selectedFiles) {
+    //   const timestamp = Date.now();
+    //   const fileName = `${timestamp}_${selectedFiles.name}`;
+    //   const params = {
+    //     Bucket: "impactshaaladocuments",
+    //     Key: `documents/${fileName}`,
+    //     Body: selectedFiles,
+    //   }
+    //   const res = await s3.upload(params).promise();
+    //   post.attachmentUrl = res.Location;
+    //   post.attachment = selectedFiles.name;
+    // }
 
     try {
       const res = await axiosInstance.post(
