@@ -10,6 +10,7 @@ import {
 } from "../controllers/post.controller.js";
 // import { cookieAuth } from "../utils/cookieAuth.js";
 import { authenticateUser } from "../middlewares/authenticateUsers.js";
+import { upload } from "../utils/multer.js";
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ const router = express.Router();
 router.get("/getsinglepost/:id", getSinglePost);
 router.patch("/approvePost/:postId", approvePost);
 router.get("/getPendingPost", getPendingPosts);
-router.post("/create", createPost);
+router.post("/create", upload.single("attachment"), createPost);
 
 router.use(authenticateUser);
 

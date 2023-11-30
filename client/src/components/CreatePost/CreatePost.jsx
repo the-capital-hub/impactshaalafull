@@ -13,11 +13,6 @@ const CreatePost = ({ onCancel }) => {
   const user = useSelector((state) => state.authUser.user);
   const id = user._id;
   const userDetails = user;
-  const loggedInUser = JSON.parse(localStorage.getItem("IsUser"));
-
-  useEffect(() => {
-    console.log("Logg", loggedInUser);
-  }, [])
 
   //states
   const [post, setPost] = useState({
@@ -25,7 +20,7 @@ const CreatePost = ({ onCancel }) => {
     toDate: date.toISOString().slice(0, 10),
     time: date.toTimeString().slice(0, 5),
     tenure: "Micro Projects: (1 to 3 days)",
-    keywords: loggedInUser.tags,
+    keywords: user.tags,
     attachment: "",
     attachmentUrl: "",
   });
@@ -39,32 +34,38 @@ const CreatePost = ({ onCancel }) => {
 
   const handleCreatePost = async (e) => {
     e.preventDefault();
-    // if (selectedFiles) {
-    //   const timestamp = Date.now();
-    //   const fileName = `${timestamp}_${selectedFiles.name}`;
-    //   const params = {
-    //     Bucket: "impactshaaladocuments",
-    //     Key: `documents/${fileName}`,
-    //     Body: selectedFiles,
-    //   }
-    //   const res = await s3.upload(params).promise();
-    //   post.attachmentUrl = res.Location;
-    //   post.attachment = selectedFiles.name;
-    // }
+
+    const formData = new FormData();
+
+    if (selectedFiles) {
+      formData.append("attachment", selectedFiles);
+    }
+
+    for (const key in post) {
+      formData.append(key, post[key]);
+    }
+
+    formData.append("createdById", id);
+    formData.append("location", userDetails.city);
+    formData.append("isAdmin", false);
+
+    console.log(formData);
 
     try {
       const res = await axiosInstance.post(
         `${import.meta.env.VITE_BASE_URL}/api/post/create`,
+        formData,
         {
-          ...post,
-          createdById: id,
-          location: userDetails.city,
-          isAdmin: false,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
+
       toast.success(
         "Your post request has been submitted. An admin will review and accept it soon."
       );
+
       console.log(res.data);
       onCancel(false);
     } catch (err) {
@@ -93,8 +94,8 @@ const CreatePost = ({ onCancel }) => {
               required
             /> */}
             <div className="tagsWrapper">
-              {loggedInUser.tags.length !== 0 ? (
-                loggedInUser.tags.map((tag, index) => (
+              {user.tags.length !== 0 ? (
+                user.tags.map((tag, index) => (
                   <div key={index} className="tag">
                     <p>{tag}</p>
                   </div>

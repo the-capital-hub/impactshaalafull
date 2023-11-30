@@ -1,4 +1,5 @@
 import Post from "../modals/post.modal.js";
+import { s3 } from "../utils/awsConfig.js";
 
 const createPost = async (req, res) => {
   try {
@@ -6,6 +7,20 @@ const createPost = async (req, res) => {
       req.body.status = "active";
     } else {
       req.body.status = "pending";
+    }
+
+    if (req.file) {
+      const timestamp = Date.now();
+      const fileName = `${timestamp}_${req.file.originalname}`;
+      const params = {
+        Bucket: "impactshaaladocuments",
+        Key: `documents/${fileName}`,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
+      };
+      const res = await s3.upload(params).promise();
+      req.body.attachmentUrl = res.Location;
+      delete req.body.attachment;
     }
     const newPost = new Post({
       ...req.body,
@@ -56,7 +71,9 @@ const getSomePosts = async (req, res) => {
 
 const approvePost = async (req, res) => {
   try {
-    const post = await Post.findByIdAndUpdate(req.params.postId, { status: "active" });
+    const post = await Post.findByIdAndUpdate(req.params.postId, {
+      status: "active",
+    });
     if (!post) {
       return res.status(404).send({ message: "Post not found" });
     }
@@ -69,7 +86,9 @@ const approvePost = async (req, res) => {
 
 export const getPendingPosts = async (req, res) => {
   try {
-    const pendingPosts = await Post.find({ status: "pending" }).sort({ createdAt: -1 });
+    const pendingPosts = await Post.find({ status: "pending" }).sort({
+      createdAt: -1,
+    });
     res.status(200).send(pendingPosts);
   } catch (err) {
     console.log(err);
@@ -77,4 +96,11 @@ export const getPendingPosts = async (req, res) => {
   }
 };
 
-export { createPost, getPostByUser, getAllPosts, getSomePosts, getSinglePost, approvePost };
+export {
+  createPost,
+  getPostByUser,
+  getAllPosts,
+  getSomePosts,
+  getSinglePost,
+  approvePost,
+};
